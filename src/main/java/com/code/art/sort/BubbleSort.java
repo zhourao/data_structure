@@ -1,20 +1,22 @@
 package com.code.art.sort;
 
 /**
- * 描述: 希尔排序
+ * 描述:冒泡排序
  *
  * @author zhourao
- * @create 2021-01-06 12:08 下午
+ * @create 2021-03-12 11:40 上午
  */
-public class Shell {
+public class BubbleSort {
 
     public static void sort(Comparable[] a) {
-        //将a[]按升序排列
-        for (int h = a.length / 2; h > 0; h /= 2)
-            for (int i = h; i < a.length; i++)
-                //将a[j]插入到a[j-h]、a[j-2h]、a[j-3h]...之中
-                for (int j = i; j >= h && less(a[j], a[j - h]); j -= h)
-                    exch(a, j, j - h);
+        for (int i = 0; i < a.length; i++)
+            //设置冒泡数量i（初始为0）
+            //按冒泡范围j∈[0,a.length()-1-i)进行遍历
+            for (int j = 0; j < a.length - 1 - i; j++)
+                //冒泡操作：相邻元素j（初始值0）和j+1进行比较
+                // 如a[j]>a[j+1]则交换位置
+                if (less(a[j + 1], a[j]))
+                    exch(a, j, j + 1);
     }
 
     private static <T> boolean less(Comparable<T> v, Comparable<T> w) {

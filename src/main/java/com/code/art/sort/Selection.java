@@ -8,24 +8,33 @@ package com.code.art.sort;
  */
 public class Selection {
 
-    public static <T> void sort(Comparable<T>[] a) {
-        //将a[]按升序排列
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
+    public static void sort(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
             int min = i;
             //遍历找到最小的元素
-            for (int j = i + 1; j < N; j++)
+            for (int j = i + 1; j < a.length; j++)
                 if (less(a[j], a[min])) min = j;
             //对元素进行交换
             exch(a, i, min);
-            //show(a);
         }
     }
 
+    /**
+     * @param v   参数v
+     * @param w   参数w
+     * @param <T> 泛型
+     * @return T/F=v是否比w小
+     */
     private static <T> boolean less(Comparable<T> v, Comparable<T> w) {
         return v.compareTo((T) w) < 0;
     }
 
+    /**
+     * @param a   数组
+     * @param i   索引位置
+     * @param j   索引位置
+     * @param <T> 泛型
+     */
     private static <T> void exch(Comparable<T>[] a, int i, int j) {
         Comparable<T> t = a[i];
         a[i] = a[j];

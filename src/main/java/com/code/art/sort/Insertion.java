@@ -8,16 +8,29 @@ package com.code.art.sort;
  */
 public class Insertion {
 
-    public static <T> void sort(Comparable<T>[] a) {
-        //将a[]按升序排列
-        int N = a.length;
-        for (int i = 1; i < N; i++) {
-            //将a[j]插入到a[j-1]、a[j-2]、a[j-3]...之中
-            for (int j = i; j > 0 && less(a[j], a[j - 1]); j--)
+    public static void simpleSort(Comparable[] a) {
+        for (int i = 1; i < a.length; i++) {
+            //将a[j]插入到a[j-1]、a[j-2]...a[0]之中
+            for (int j = i; j >= 1 && less(a[j], a[j - 1]); j--)
                 exch(a, j, j - 1);
-            //show(a);
         }
     }
+
+    public static void sort(Comparable[] a) {
+        for (int i = 1; i < a.length; i++) {
+            //①保存需待插入的数据值、设置需插入的数据位置
+            Comparable insertV = a[i];
+            int j = i;
+            //②将大于insertVal的值向右移动
+            while (j >= 1 && less(insertV, a[j - 1])) {
+                a[j] = a[j - 1];
+                j--;
+            }
+            //③将insertVal插入对应位置
+            a[j] = insertV;
+        }
+    }
+
 
     private static <T> boolean less(Comparable<T> v, Comparable<T> w) {
         return v.compareTo((T) w) < 0;
@@ -47,8 +60,8 @@ public class Insertion {
 
     public static void main(String[] args) {
         String[] a = {"S", "O", "R", "T", "E", "X", "A", "M", "P", "L", "E"};
-        show(a);
         sort(a);
+        show(a);
         assert isSorted(a);
     }
 }

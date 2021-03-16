@@ -1,7 +1,7 @@
 package com.code.art.sort;
 
 /**
- * 描述: 归并排序
+ * 描述: 自底向上的归并排序
  * 自底向上
  *
  * @author zhourao
@@ -24,9 +24,10 @@ public class MergeBU {
     //将a[lo..mid]和a[mid+1..hi]归并
     private static void merge(Comparable[] a, int lo, int mid, int hi) {
         int i = lo, j = mid + 1;
-        for (int k = lo; k <= hi; k++) //j将a[lo..hi]复制到aux[lo..hi]
-            aux[k] = a[k];
-        for (int k = lo; k <= hi; k++) { //归并回到a[lo..hi]
+        //j将a[lo..hi]复制到aux[lo..hi]
+        for (int k = lo; k <= hi; k++) aux[k] = a[k];
+        //归并回到a[lo..hi]
+        for (int k = lo; k <= hi; k++) {
             if (i > mid) a[k] = aux[j++];
             else if (j > hi) a[k] = aux[i++];
             else if (less(aux[j], aux[i])) a[k] = aux[j++];

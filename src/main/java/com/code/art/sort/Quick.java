@@ -1,4 +1,5 @@
 package com.code.art.sort;
+
 /**
  * 描述: 快速排序
  *
@@ -7,12 +8,19 @@ package com.code.art.sort;
  */
 public class Quick {
 
-    //归并所需的辅助数组
-    private static Comparable[] aux;
-
-    public static <T> void sort(Comparable<T>[] a) {
+    public static void sort(Comparable[] a) {
         //StdRandom.shuffle(a); //消除对输入的依赖
         sort(a, 0, a.length - 1);
+    }
+
+    //将数组a[lo..li]排序
+    private static void sort(Comparable[] a, int lo, int hi) {
+        if (hi <= lo) return;
+        // 元素过少的时候使用插入排序优化
+        // if (hi <= lo + 16) { Insertion.sort(a);return; }
+        int j = partition(a, lo, hi);
+        sort(a, lo, j - 1);  //将左半部分a[lo..j-1]排序
+        sort(a, j, hi); //将右半部分a[j..hi]排序
     }
 
     //将数组切分为a[lo..i-1],a[i],a[i+1..hi]
@@ -27,14 +35,6 @@ public class Quick {
         }
         exch(a, lo, j); //将v = a[j]放入正确的位置
         return j; //a[lo..j-1] <= a[j] <= a[j+1..hi]达成
-    }
-
-    //将数组a[lo..li]排序
-    private static void sort(Comparable[] a, int lo, int hi) {
-        if (hi <= lo) return;
-        int j = partition(a, lo, hi);
-        sort(a, lo, j - 1);  //将左半部分a[lo..j-1]排序
-        sort(a, j, hi); //将右半部分a[j..hi]排序
     }
 
     private static <T> boolean less(Comparable<T> v, Comparable<T> w) {

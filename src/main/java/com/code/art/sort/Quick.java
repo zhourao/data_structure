@@ -11,6 +11,7 @@ public class Quick {
     public static void sort(Comparable[] a) {
         //StdRandom.shuffle(a); //消除对输入的依赖
         sort(a, 0, a.length - 1);
+        //sort3way(a, 0, a.length - 1);
     }
 
     //将数组a[lo..li]排序
@@ -18,13 +19,6 @@ public class Quick {
         if (hi <= lo) return;
         // 元素过少的时候使用插入排序优化
         // if (hi <= lo + 16) { Insertion.sort(a);return; }
-        int j = partition(a, lo, hi);
-        sort(a, lo, j - 1);  //将左半部分a[lo..j-1]排序
-        sort(a, j, hi); //将右半部分a[j..hi]排序
-    }
-
-    //将数组切分为a[lo..i-1],a[i],a[i+1..hi]
-    private static int partition(Comparable[] a, int lo, int hi) {
         int i = lo, j = hi + 1; //左右扫描指针
         Comparable v = a[lo];
         while (true) {//扫描左右，检查是否结束并交换元素
@@ -34,7 +28,26 @@ public class Quick {
             exch(a, i, j);
         }
         exch(a, lo, j); //将v = a[j]放入正确的位置
-        return j; //a[lo..j-1] <= a[j] <= a[j+1..hi]达成
+
+        sort(a, lo, j - 1);  //将左半部分a[lo..i]排序
+        sort(a, i, hi); //将右半部分a[i+1..hi]排序
+    }
+
+    private static void sort3way(Comparable[] a, int lo, int hi) {
+        if (hi <= lo) return;
+        // 元素过少的时候使用插入排序优化
+        // if (hi <= lo + 16) { Insertion.sort(a);return; }
+        int lt = lo, i = lo + 1, gt = hi;
+
+        Comparable v = a[lo];
+        while (i <= gt) {
+            int cmp = a[i].compareTo(v);
+            if (cmp < 0) exch(a, lt++, i++);
+            else if (cmp > 0) exch(a, i, gt--);
+            else i++;
+        }
+        sort(a, lo, lt - 1);
+        sort(a, gt + 1, hi);
     }
 
     private static <T> boolean less(Comparable<T> v, Comparable<T> w) {

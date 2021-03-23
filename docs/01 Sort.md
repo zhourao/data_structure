@@ -55,7 +55,8 @@ public class SampleSort {
 
 ### 3.1 选择排序
 
-#### 步骤
+#### 图解&步骤
+![avatar](../images/sort/01-selection.gif)
 
 * 找min：找到数组最小的那个元素
 * min替换：将它和数字的第一个元素交换位置
@@ -83,7 +84,12 @@ public class Selection {
 
 ### 3.2 冒泡排序
 
-#### 步骤
+#### 图解&步骤
+
+![avatar](../images/sort/02-bubble.gif)
+* 相邻元素对比：如果前者大则交换
+* 索引+1：继续相邻元素比较
+* 循环，从[0,a.length-1-循环次数]
 
 #### 分析
 
@@ -107,8 +113,11 @@ public class BubbleSort {
 
 ### 3.3 插入排序
 
-#### 步骤
-
+#### 动图&步骤
+![avatar](../images/sort/03-insert.gif)
+* 确定需要插入的元素i（初始值为1）
+* 不断与前1个元素比较，如果小于前者或达到头部则停止
+* i+1循环前两步骤
 #### 分析
 
 #### 实现
@@ -129,7 +138,8 @@ public class Insertion {
 ### 3.4 希尔排序
 
 #### 步骤
-
+![avatar](../images/sort/04-shell.gif)
+* 有间隔的插入排序
 #### 分析
 
 #### 实现
@@ -149,10 +159,32 @@ public class Shell {
 ```
 
 ### 3.5 归并排序
-
-#### 步骤
-
+算法设计中分治思想的典型应用
+#### 图解&步骤
+![img.png](../images/sort/05-merge.png)
+1. 声明一个静态数组aux，大小与数组长度相同
+2. 进行递归排序调用
+    1. 递归结束条件：索引高位≤低位
+    2. 分别进行左边递归排序和右边递归排序
+    3. 进行两个有序数组合并
+3. 合并函数
+    1. 将数组[lo,hi]复制至aux[lo.hi]
+    2. 设置起始值i=lo，j=mid+1
+    3. 按需进行数组合并
 #### 分析
+* 对于长度为N的任意数组，自顶向下的归并排序需要½NlgN至NlgN次比较
+* 对于长度为N的任意数组，自顶向下的归并排序最多需要访问数组6NlgN次。
+
+##### 优化点
+1. 对小规模子数组使用插入排序
+2. 将＜改成≤，提升效率
+3. 不将元素复制到辅助数组
+
+##### 优点
+* 时间复杂度NlgN是排序算法中最低的
+
+##### 缺点
+* 空间复杂度不是最优的
 
 #### 实现
 
@@ -198,9 +230,34 @@ public class Merge {
 
 ### 3.6 快速排序
 
-#### 步骤
+#### 图&步骤
+![img.png](../images/sort/06-quick2way.png)
+##### 双路快排
+1. 进行数组随机打散（防止最坏情况出现）
+2. 进行递归排序调用
+    1. 选择lo元素作为切分元素，寻找lo元素val在[lo,hi]中的位置
+    2. 从lo向hi寻找比val大的元素，从hi向lo寻找比val小的元素，找到1对则进行值交换
+    3. 直至确定lo在[lo,hi]中对应的位置j，将lo位置元素j位置进行交换，返回j
+    4. 将数组分成[lo,j]和[j+1, hi]两部分继续进行递归
+    
+##### 3路快排
 
+
+![img.png](../images/sort/06-qucik3way.png)
 #### 分析
+
+##### 优点
+* 比较次数少
+* 原地排序，不需要额外的空间
+* 排序数组所需的时间和NlgN成正比
+
+##### 缺点
+* 非常脆弱
+    * 极端情况下它的性能是平方级别的
+    
+##### 改进点
+* 小数组切换到插入排序
+* 三取样切分
 
 #### 实现
 
@@ -210,6 +267,7 @@ public class Quick {
     public static void sort(Comparable[] a) {
         //StdRandom.shuffle(a); //消除对输入的依赖
         sort(a, 0, a.length - 1);
+        //sort3way(a, 0, a.length - 1);
     }
 
     //将数组a[lo..li]排序
@@ -217,13 +275,6 @@ public class Quick {
         if (hi <= lo) return;
         // 元素过少的时候使用插入排序优化
         // if (hi <= lo + 16) { Insertion.sort(a);return; }
-        int j = partition(a, lo, hi);
-        sort(a, lo, j - 1);  //将左半部分a[lo..j-1]排序
-        sort(a, j, hi); //将右半部分a[j..hi]排序
-    }
-
-    //将数组切分为a[lo..i-1],a[i],a[i+1..hi]
-    private static int partition(Comparable[] a, int lo, int hi) {
         int i = lo, j = hi + 1; //左右扫描指针
         Comparable v = a[lo];
         while (true) {//扫描左右，检查是否结束并交换元素
@@ -233,27 +284,40 @@ public class Quick {
             exch(a, i, j);
         }
         exch(a, lo, j); //将v = a[j]放入正确的位置
-        return j; //a[lo..j-1] <= a[j] <= a[j+1..hi]达成
+
+        sort(a, lo, j - 1);  //将左半部分a[lo..i]排序
+        sort(a, i, hi); //将右半部分a[i+1..hi]排序
+    }
+
+    private static void sort3way(Comparable[] a, int lo, int hi) {
+        if (hi <= lo) return;
+        // 元素过少的时候使用插入排序优化
+        // if (hi <= lo + 16) { Insertion.sort(a);return; }
+        int lt = lo, i = lo + 1, gt = hi;
+
+        Comparable v = a[lo];
+        while (i <= gt) {
+            int cmp = a[i].compareTo(v);
+            if (cmp < 0) exch(a, lt++, i++);
+            else if (cmp > 0) exch(a, i, gt--);
+            else i++;
+        }
+        sort(a, lo, lt - 1);
+        sort(a, gt + 1, hi);
     }
 }
 ```
 
 ### 3.7 桶排序
 
-#### 步骤
-
-#### 分析
-
-#### 实现
+(如有需要再补充)
 
 ### 3.8 基数排序
 
-#### 步骤
-
-#### 分析
-
-#### 实现
+(如有需要再补充)
 
 ## CHANGELOG
 
 ##### 2021年03月16日16:04:40 创建
+
+##### 2021年03月23日15:56:28 补充图解

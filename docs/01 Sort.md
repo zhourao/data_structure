@@ -231,31 +231,37 @@ public class Merge {
 ### 3.6 快速排序
 
 #### 图&步骤
+
 ![img.png](../images/sort/06-quick2way.png)
+
 ##### 双路快排
+
 1. 进行数组随机打散（防止最坏情况出现）
 2. 进行递归排序调用
     1. 选择lo元素作为切分元素，寻找lo元素val在[lo,hi]中的位置
     2. 从lo向hi寻找比val大的元素，从hi向lo寻找比val小的元素，找到1对则进行值交换
     3. 直至确定lo在[lo,hi]中对应的位置j，将lo位置元素j位置进行交换，返回j
     4. 将数组分成[lo,j]和[j+1, hi]两部分继续进行递归
-    
+
 ##### 3路快排
 
-
 ![img.png](../images/sort/06-qucik3way.png)
+
 #### 分析
 
 ##### 优点
+
 * 比较次数少
 * 原地排序，不需要额外的空间
 * 排序数组所需的时间和NlgN成正比
 
 ##### 缺点
+
 * 非常脆弱
     * 极端情况下它的性能是平方级别的
-    
+
 ##### 改进点
+
 * 小数组切换到插入排序
 * 三取样切分
 
@@ -308,13 +314,88 @@ public class Quick {
 }
 ```
 
-### 3.7 桶排序
+### 3.7 计数排序
+#### 图&步骤
+1. 找出待排序的数组中最大和最小的元素
+2. 统计数组中每个值为i的元素出现的次数，存入数组C的第i项
+3. 对所有的计数累加（从C中的第一个元素开始，每一项和前一项相加）
+4. 反向填充目标数组：将每个元素i放在新数组的第C(i)项，每放一个元素就将C(i)减去1
+   ![img.png](../images/sort/09-counting.gif)
+#### 分析
 
-(如有需要再补充)
+#### 实现
 
-### 3.8 基数排序
 
-(如有需要再补充)
+### 3.8 桶排序
+
+#### 图&步骤
+
+1. 在待排序数组中找出最大值max和最小值min，并根据“bucketNum=（max-min）/arr.length+1”创建桶。
+2. 遍历待排序的数组arr，计算每个元素arr[i]的大小并放入桶中
+3. 对每个桶各自排序，在每个桶的内部排序完成后就得到了完整的排序数组。
+
+#### 分析
+
+#### 实现
+
+```java
+public class Bucket {
+    public static int[] sort(int[] a) {
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < a.length; i++) {
+            max = Math.max(max, a[i]);
+            min = Math.min(min, a[i]);
+        }
+
+        //创建桶
+        int bucketNum = (max - min) / a.length + 1;
+        ArrayList<ArrayList<Integer>> bucketArr = new ArrayList<ArrayList<Integer>>(bucketNum);
+        for (int i = 0; i < bucketNum; i++)
+            bucketArr.add(new ArrayList<Integer>());
+
+        //将每个元素都放入桶中
+        for (int i = 0; i < a.length; i++) {
+            int num = (a[i] - min) / a.length;
+            bucketArr.get(num).add(a[i]);
+        }
+
+        bucketArr.forEach(Collections::sort);
+
+        int i = 0;
+        for (ArrayList<Integer> bucket : bucketArr)
+            for (Integer e : bucket) {
+                a[i] = e;
+                i++;
+            }
+        return a;
+    }
+}
+```
+
+### 3.9 基数排序
+
+#### 图&步骤
+1. 将所有待比较数值（正整数）统一为同样的数位长度，数位较短的数前面补零。
+2. 从最低位开始，依次进行一次排序。
+3. 这样从最低位排序一直到最高位排序完成以后, 数列就变成一个有序序列。
+   
+[知乎链接](https://zhuanlan.zhihu.com/p/126116878)
+#### 分析
+
+#### 实现
+
+### 3.10 堆排序
+
+#### 图&步骤
+
+#### 分析
+
+#### 实现
+
+## 4 常用排序比较
+
+![img.png](../images/sort/compare.png)
 
 ## CHANGELOG
 

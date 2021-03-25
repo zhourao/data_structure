@@ -6,7 +6,7 @@ package com.code.art.sort;
  * @author zhourao
  * @create 2021-03-12 11:40 上午
  */
-public class BubbleSort {
+public class Bubble {
 
     public static void sort(Comparable[] a) {
         for (int i = 0; i < a.length; i++)

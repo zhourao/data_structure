@@ -7,39 +7,31 @@ package com.code.art.sort;
  * @author zhourao
  * @create 2021-01-09 5:12 下午
  */
-public class MaxPQ<E extends Comparable<E>> {
+public class MaxPQ<Key extends Comparable<Key>> {
 
-    private E[] pq;
+    private Key[] pq;  //基于堆的完全二叉树
 
     private int N = 0;//存储在pq[1,...N]中，pq[0]没使用
 
     public MaxPQ(int maxN) {
-        pq = (E[]) new Object[maxN + 1];
+        pq = (Key[]) new Object[maxN + 1];
     }
 
-    public void enqueue(E e) {
-        pq[++N] = e; //在数组末尾添加元素
+    public void insert(Key v) {
+        pq[++N] = v; //在数组末尾添加元素
         swim(N); //上浮操作
     }
 
-    public E dequeue() {
+    public Key delMax() {
         if (N == pq.length - 1)
             resize(2 * pq.length - 1);
-        E max = pq[1]; //从根节点得到最大元素
+        Key max = pq[1]; //从根节点得到最大元素
         exch(pq, 1, N--); //将其和最后一个结点交换
         pq[N + 1] = null; // 防止对象游离
         sink(1); //恢复堆的有序性
         if (N == (pq.length - 1) / 4 && (pq.length - 1) / 2 != 0)
             resize(pq.length / 2 + 1);
         return max;
-    }
-
-    public int getSize() {
-        return N;
-    }
-
-    public boolean isEmpty() {
-        return N == 0;
     }
 
     /**
@@ -76,7 +68,7 @@ public class MaxPQ<E extends Comparable<E>> {
     }
 
     private void resize(int newMaxN) {
-        E[] newData = (E[]) new Object[newMaxN + 1];
+        Key[] newData = (Key[]) new Object[newMaxN + 1];
         for (int i = 0; i < N; i++)
             newData[i] = pq[i];
         pq = newData;

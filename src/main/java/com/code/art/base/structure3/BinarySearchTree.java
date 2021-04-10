@@ -1,6 +1,7 @@
 package com.code.art.base.structure3;
 
 import java.util.LinkedList;
+import java.util.Stack;
 
 /**
  * 描述: 二分搜索树
@@ -126,6 +127,24 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
         }
     }
 
+    //根据前序遍历的特点，我们很容易将其与栈的特点相结合
+    // 二叉树的非递归前序遍历
+    public void preOrderLoop() {
+        if (root == null) return;
+
+        Stack<Node> stack = new Stack<>();
+        Node current = null;
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            current = stack.pop();
+            System.out.println(current.key + "->" + current.val);
+            if (current.right != null)
+                stack.push(current.right);
+            if (current.left != null)
+                stack.push(current.left);
+        }
+    }
+
     // 二分搜索树的中序遍历
     public void inOrder() {
         inOrder(root);
@@ -141,6 +160,36 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
         }
     }
 
+
+    // 二叉树的非递归前序遍历
+    //中序遍历的思路：先找到最左的字数，然后返回其父节点，然后遍历右子树
+    public void inOrderLoop() {
+        if (root == null) return;
+
+        Stack<Node> stack = new Stack<>();
+        Node node = root, tmp = null;
+
+        //判断条件：所有栈为空，且节节点指向为空，即所有节点已经完成遍历
+        while (!stack.isEmpty() || node != null) {
+
+            //向左搜索，寻找最左的节点，即中序遍历的第一个节点
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
+
+            //对每一个节点进行判断
+            if (!stack.isEmpty()) {
+                // 获取当前节点
+                tmp = stack.pop();
+                // 遍历该节点
+                System.out.println(tmp.key + "->" + tmp.val);
+                node = tmp.right;
+            }
+        }
+
+    }
+
     // 二分搜索树的后序遍历
     public void postOrder() {
         postOrder(root);
@@ -153,6 +202,25 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
             postOrder(node.left);
             postOrder(node.right);
             System.out.println(node.key);
+        }
+    }
+
+    //后序遍历的方法：先左子树，后右子树，再最后根节点
+    //如果反过来，顺序就变成了：先根节点，后右子树，再左子树，和先序遍历有点像
+    //因此，后序遍历可以变为：先遍历根节点，后遍历右子树，再遍历左子树结果的逆序
+    private void postOrderLoop() {
+        if (root == null) return;
+
+        Stack<Node> stack = new Stack<>();
+        Node current = null;
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            current = stack.pop();
+            if (current.left != null)
+                stack.push(current.left);
+            System.out.println(current.key + "->" + current.val);
+            if (current.right != null)
+                stack.push(current.right);
         }
     }
 

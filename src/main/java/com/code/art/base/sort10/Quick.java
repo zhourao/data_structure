@@ -16,29 +16,27 @@ public class Quick {
 
     //将数组a[lo..li]排序
     private static void sort(Comparable[] a, int lo, int hi) {
-        if (hi <= lo) return;
+        if (lo >= hi) return;
         // 元素过少的时候使用插入排序优化
         // if (hi <= lo + 16) { Insertion.sort(a);return; }
-        int i = lo, j = hi + 1; //左右扫描指针
-        Comparable v = a[lo];
-        while (true) {//扫描左右，检查是否结束并交换元素
-            while (less(a[++i], v)) if (i == hi) break;
-            while (less(v, a[--j])) if (j == lo) break;
-            if (i >= j) break;
+        int i = lo, j = hi; //左右扫描指针
+
+        while (i < j) {//扫描左右，检查是否结束并交换元素
+            while (i < j && !less(a[j], a[lo])) j--;
+            while (i < j && !less(a[lo], a[i])) i++;
             exch(a, i, j);
         }
-        exch(a, lo, j); //将v = a[j]放入正确的位置
+        exch(a, lo, i); //将v = a[j]放入正确的位置
 
-        sort(a, lo, j - 1);  //将左半部分a[lo..i]排序
-        sort(a, i, hi); //将右半部分a[i+1..hi]排序
+        sort(a, lo, i - 1);  //将左半部分a[lo..i]排序
+        sort(a, i + 1, hi); //将右半部分a[i+1..hi]排序
     }
 
     private static void sort3way(Comparable[] a, int lo, int hi) {
-        if (hi <= lo) return;
+        if (lo >= hi) return;
         // 元素过少的时候使用插入排序优化
         // if (hi <= lo + 16) { Insertion.sort(a);return; }
         int lt = lo, i = lo + 1, gt = hi;
-
         Comparable v = a[lo];
         while (i <= gt) {
             int cmp = a[i].compareTo(v);

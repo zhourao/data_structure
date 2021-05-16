@@ -1,7 +1,5 @@
 package com.code.art.search;
 
-import com.sun.org.apache.regexp.internal.RE;
-
 /**
  * 描述:红黑树（与2-3树是相同的）
  * 性质：

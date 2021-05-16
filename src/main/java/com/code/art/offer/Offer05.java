@@ -1,7 +1,5 @@
 package com.code.art.offer;
 
-import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
-
 /**
  * 描述: 替换空格
  * https://leetcode-cn.com/problems/ti-huan-kong-ge-lcof/

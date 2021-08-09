@@ -6,7 +6,7 @@ package com.code.art.leetcode;
  * @author zhourao
  * @create 2020-10-13 2:17 下午
  */
-public class Code24 {
+public class Code0024 {
 
     /**
      * Definition for singly-linked list.

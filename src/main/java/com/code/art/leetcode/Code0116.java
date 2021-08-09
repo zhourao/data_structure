@@ -9,7 +9,7 @@ import java.util.Queue;
  * @author zhourao
  * @create 2020-10-15 6:00 下午
  */
-public class Code116 {
+public class Code0116 {
 
     static class Node {
         public int val;
@@ -35,22 +35,25 @@ public class Code116 {
 
     public static Node connect(Node root) {
         if (root == null) return null;
-        Queue<Node> queue = new LinkedList<Node>();
-        queue.add(root);
-        int i = 1;
-        Node prevNode = root;
-        while (!queue.isEmpty()) {
-            Node tempTreeNode = queue.remove();
-            if (((i - 1) & i) != 0) prevNode.next = tempTreeNode;
-            i++;
-            prevNode = tempTreeNode;
-
-            if (tempTreeNode.left != null)
-                queue.add(tempTreeNode.left);
-            if (tempTreeNode.right != null)
-                queue.add(tempTreeNode.right);
-        }
+        connect2Node(root.left, root.right);
         return root;
+    }
+
+    public static void connect2Node(Node node1, Node node2) {
+        if(node1 == null || node2 == null) {
+            return;
+        }
+
+        /**** 前序遍历位置 ****/
+        // 将传入的两个节点连接
+        node1.next = node2;
+
+        // 连接相同父节点的两个子节点
+        connect2Node(node1.left, node1.right);
+        connect2Node(node2.left, node2.right);
+
+        // 连接跨越父节点的两个子节点
+        connect2Node(node1.right, node2.left);
     }
 
     public static Node connect2(Node root) {

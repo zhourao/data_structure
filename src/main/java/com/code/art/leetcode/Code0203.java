@@ -6,7 +6,7 @@ package com.code.art.leetcode;
  * @author zhourao
  * @create 2020-10-14 12:20 下午
  */
-public class Code203 {
+public class Code0203 {
 
     public static class ListNode {
         int val;

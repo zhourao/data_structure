@@ -9,7 +9,7 @@ import java.util.List;
  * @author zhourao
  * @create 2021-08-14 10:00 下午
  */
-public class Code797 {
+public class Code0797 {
 
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
         return solve(graph, 0);
